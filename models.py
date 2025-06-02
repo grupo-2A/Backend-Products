@@ -8,3 +8,12 @@ class Categoria(Base):
     nombre = Column(String, unique=True, nullable=False)
 
     productos = relationship("Producto", back_populates="categoria")
+
+class Producto(Base):
+    __tablename__ = "productos"
+    id = Column(Integer, primary_key=True, index=True)
+    nombre = Column(String, nullable=False)
+    cantidad = Column(Integer, nullable=False)
+    categoria_id = Column(Integer, ForeignKey("categorias.id"))
+
+    categoria = relationship("Categoria", back_populates="productos")
