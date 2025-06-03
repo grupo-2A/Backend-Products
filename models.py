@@ -1,3 +1,4 @@
+# models.py
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from database import Base
@@ -8,6 +9,7 @@ class Categoria(Base):
     nombre = Column(String, unique=True, nullable=False)
 
     productos = relationship("Producto", back_populates="categoria")
+
 
 class Producto(Base):
     __tablename__ = "productos"
