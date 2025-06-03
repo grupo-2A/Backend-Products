@@ -77,3 +77,17 @@ def actualizar_categoria(categoria_id: int, datos: schemas.CategoriaCreate, db: 
     db.commit()
     db.refresh(cat_db)
     return cat_db
+
+
+@app.delete("/categorias/{categoria_id}")
+def eliminar_categoria(categoria_id: int, db: Session = Depends(get_db)):
+    cat_db = db.query(models.Categoria).filter(models.Categoria.id == categoria_id).first()
+    if not cat_db:
+        raise HTTPException(status_code=404, detail="Categoría no encontrada")
+    # Antes de eliminar, podrías comprobar si hay productos asociados
+    productos_asoc = db.query(models.Producto).filter(models.Producto.categoria_id == categoria_id).first()
+    if productos_asoc:
+        raise HTTPException(status_code=400, detail="No se puede eliminar: hay productos asociados")
+    db.delete(cat_db)
+    db.commit()
+    return {"message": "Categoría eliminada correctamente"}
