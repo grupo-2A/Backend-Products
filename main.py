@@ -112,3 +112,12 @@ def crear_producto(producto: schemas.ProductoCreate, db: Session = Depends(get_d
 @app.get("/productos/", response_model=list[schemas.Producto])
 def listar_productos(db: Session = Depends(get_db)):
     return db.query(models.Producto).all()
+
+
+
+@app.get("/productos/{producto_id}", response_model=schemas.Producto)
+def obtener_producto(producto_id: int, db: Session = Depends(get_db)):
+    prod = db.query(models.Producto).filter(models.Producto.id == producto_id).first()
+    if not prod:
+        raise HTTPException(status_code=404, detail="Producto no encontrado")
+    return prod
