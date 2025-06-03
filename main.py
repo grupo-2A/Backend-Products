@@ -121,3 +121,20 @@ def obtener_producto(producto_id: int, db: Session = Depends(get_db)):
     if not prod:
         raise HTTPException(status_code=404, detail="Producto no encontrado")
     return prod
+
+
+@app.put("/productos/{producto_id}", response_model=schemas.Producto)
+def actualizar_producto(producto_id: int, datos: schemas.ProductoCreate, db: Session = Depends(get_db)):
+    prod_db = db.query(models.Producto).filter(models.Producto.id == producto_id).first()
+    if not prod_db:
+        raise HTTPException(status_code=404, detail="Producto no encontrado")
+    # Verificar que la categoría nueva exista
+    categoria = db.query(models.Categoria).filter(models.Categoria.id == datos.categoria_id).first()
+    if not categoria:
+        raise HTTPException(status_code=404, detail="Categoría no encontrada")
+    prod_db.nombre = datos.nombre
+    prod_db.cantidad = datos.cantidad
+    prod_db.categoria_id = datos.categoria_id
+    db.commit()
+    db.refresh(prod_db)
+    return prod_db
