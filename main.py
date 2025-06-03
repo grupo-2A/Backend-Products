@@ -46,3 +46,11 @@ def crear_categoria(categoria: schemas.CategoriaCreate, db: Session = Depends(ge
     db.commit()
     db.refresh(nueva)
     return nueva
+
+
+@app.get("/categorias/", response_model=list[schemas.Categoria])
+def listar_categorias(db: Session = Depends(get_db)):
+    return db.query(models.Categoria).all()
+
+
+
