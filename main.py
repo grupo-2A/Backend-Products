@@ -91,3 +91,18 @@ def eliminar_categoria(categoria_id: int, db: Session = Depends(get_db)):
     db.delete(cat_db)
     db.commit()
     return {"message": "Categoría eliminada correctamente"}
+
+
+
+# -------- RUTAS PARA PRODUCTOS --------
+
+@app.post("/productos/", response_model=schemas.Producto)
+def crear_producto(producto: schemas.ProductoCreate, db: Session = Depends(get_db)):
+    categoria = db.query(models.Categoria).filter(models.Categoria.id == producto.categoria_id).first()
+    if not categoria:
+        raise HTTPException(status_code=404, detail="Categoría no encontrada")
+    db_producto = models.Producto(**producto.dict())
+    db.add(db_producto)
+    db.commit()
+    db.refresh(db_producto)
+    return db_producto
