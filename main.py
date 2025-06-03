@@ -106,3 +106,9 @@ def crear_producto(producto: schemas.ProductoCreate, db: Session = Depends(get_d
     db.commit()
     db.refresh(db_producto)
     return db_producto
+
+
+
+@app.get("/productos/", response_model=list[schemas.Producto])
+def listar_productos(db: Session = Depends(get_db)):
+    return db.query(models.Producto).all()
