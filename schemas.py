@@ -9,7 +9,7 @@ class CategoriaCreate(CategoriaBase):
 class Categoria(CategoriaBase):
     id: int
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class ProductoBase(BaseModel):
     nombre: str
@@ -22,4 +22,5 @@ class ProductoCreate(ProductoBase):
 class Producto(ProductoBase):
     id: int
     class Config:
-        orm_mode = True
+        from_attributes = True
+
