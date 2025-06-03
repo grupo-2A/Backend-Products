@@ -54,3 +54,9 @@ def listar_categorias(db: Session = Depends(get_db)):
 
 
 
+@app.get("/categorias/{categoria_id}", response_model=schemas.Categoria)
+def obtener_categoria(categoria_id: int, db: Session = Depends(get_db)):
+    cat = db.query(models.Categoria).filter(models.Categoria.id == categoria_id).first()
+    if not cat:
+        raise HTTPException(status_code=404, detail="Categoría no encontrada")
+    return cat
