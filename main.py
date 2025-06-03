@@ -60,3 +60,20 @@ def obtener_categoria(categoria_id: int, db: Session = Depends(get_db)):
     if not cat:
         raise HTTPException(status_code=404, detail="Categoría no encontrada")
     return cat
+
+
+@app.put("/categorias/{categoria_id}", response_model=schemas.Categoria)
+def actualizar_categoria(categoria_id: int, datos: schemas.CategoriaCreate, db: Session = Depends(get_db)):
+    cat_db = db.query(models.Categoria).filter(models.Categoria.id == categoria_id).first()
+    if not cat_db:
+        raise HTTPException(status_code=404, detail="Categoría no encontrada")
+    # Verificar si ya existe otra categoría con el nuevo nombre
+    dup = db.query(models.Categoria)\
+            .filter(models.Categoria.nombre == datos.nombre, models.Categoria.id != categoria_id)\
+            .first()
+    if dup:
+        raise HTTPException(status_code=400, detail="Otra categoría ya usa ese nombre")
+    cat_db.nombre = datos.nombre
+    db.commit()
+    db.refresh(cat_db)
+    return cat_db
