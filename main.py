@@ -2,6 +2,8 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 import models, schemas
 from database import engine, SessionLocal, Base
+from fastapi.middleware.cors import CORSMiddleware
+
 
 
 # Crear las tablas automáticamente al iniciar
