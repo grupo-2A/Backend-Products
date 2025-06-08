@@ -13,6 +13,22 @@ app = FastAPI()
 
 
 
+origins = [
+    "http://localhost:5173",  # tu frontend
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # o ["*"] para permitir todos en desarrollo
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+
+
+
 # Dependencia para obtener la sesión de base de datos
 def get_db():
     db = SessionLocal()
@@ -30,7 +46,7 @@ def index():
     return {"message" : "API productos"}
 
 
-@app.get("/productos/")
+@app.get("/productosc/")
 def obtener_productos(db: Session = Depends(get_db)):
     productos = db.query(models.Producto).all()
     return [{"nombre": p.nombre, "cantidad": p.cantidad} for p in productos]
