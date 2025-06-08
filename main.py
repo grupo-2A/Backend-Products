@@ -30,7 +30,18 @@ def index():
     return {"message" : "API productos"}
 
 
-
+@app.get("/productos/")
+def obtener_cantidades():
+    return [
+        {"id": 1, "cantidad": 5},
+        {"id": 2, "cantidad": 10},
+        {"id": 3, "cantidad": 2},
+        {"id": 4, "cantidad": 7},
+        {"id": 5, "cantidad": 15},
+        {"id": 6, "cantidad": 4},
+        {"id": 7, "cantidad": 6},
+        {"id": 8, "cantidad": 3}
+    ]
 
 
 # -------- RUTAS PARA CATEGORÍAS --------
