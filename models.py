@@ -1,5 +1,5 @@
 # models.py
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship
 from database import Base
 
@@ -16,6 +16,8 @@ class Producto(Base):
     id = Column(Integer, primary_key=True, index=True)
     nombre = Column(String, nullable=False)
     cantidad = Column(Integer, nullable=False)
+    precio = Column(Float, nullable=True)  # ✅ Nuevo campo agregado
     categoria_id = Column(Integer, ForeignKey("categorias.id"))
 
     categoria = relationship("Categoria", back_populates="productos")
+
